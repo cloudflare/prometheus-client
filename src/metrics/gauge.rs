@@ -139,7 +139,7 @@ impl Atomic<u64> for AtomicU64 {
     }
 
     fn inc_by(&self, v: u64) -> u64 {
-        self.fetch_add(v, Ordering::Relaxed)
+        self.fetch_add(v, Ordering::SeqCst)
     }
 
     fn dec(&self) -> u64 {
@@ -147,15 +147,15 @@ impl Atomic<u64> for AtomicU64 {
     }
 
     fn dec_by(&self, v: u64) -> u64 {
-        self.fetch_sub(v, Ordering::Relaxed)
+        self.fetch_sub(v, Ordering::SeqCst)
     }
 
     fn set(&self, v: u64) -> u64 {
-        self.swap(v, Ordering::Relaxed)
+        self.swap(v, Ordering::SeqCst)
     }
 
     fn get(&self) -> u64 {
-        self.load(Ordering::Relaxed)
+        self.load(Ordering::SeqCst)
     }
 }
 
@@ -165,7 +165,7 @@ impl Atomic<u32> for AtomicU32 {
     }
 
     fn inc_by(&self, v: u32) -> u32 {
-        self.fetch_add(v, Ordering::Relaxed)
+        self.fetch_add(v, Ordering::SeqCst)
     }
 
     fn dec(&self) -> u32 {
@@ -173,15 +173,15 @@ impl Atomic<u32> for AtomicU32 {
     }
 
     fn dec_by(&self, v: u32) -> u32 {
-        self.fetch_sub(v, Ordering::Relaxed)
+        self.fetch_sub(v, Ordering::SeqCst)
     }
 
     fn set(&self, v: u32) -> u32 {
-        self.swap(v, Ordering::Relaxed)
+        self.swap(v, Ordering::SeqCst)
     }
 
     fn get(&self) -> u32 {
-        self.load(Ordering::Relaxed)
+        self.load(Ordering::SeqCst)
     }
 }
 
@@ -192,12 +192,12 @@ impl Atomic<f64> for AtomicU64 {
     }
 
     fn inc_by(&self, v: f64) -> f64 {
-        let mut old_u64 = self.load(Ordering::Relaxed);
+        let mut old_u64 = self.load(Ordering::SeqCst);
         let mut old_f64;
         loop {
             old_f64 = f64::from_bits(old_u64);
             let new = f64::to_bits(old_f64 + v);
-            match self.compare_exchange_weak(old_u64, new, Ordering::Relaxed, Ordering::Relaxed) {
+            match self.compare_exchange_weak(old_u64, new, Ordering::SeqCst, Ordering::SeqCst) {
                 Ok(_) => break,
                 Err(x) => old_u64 = x,
             }
@@ -211,12 +211,12 @@ impl Atomic<f64> for AtomicU64 {
     }
 
     fn dec_by(&self, v: f64) -> f64 {
-        let mut old_u64 = self.load(Ordering::Relaxed);
+        let mut old_u64 = self.load(Ordering::SeqCst);
         let mut old_f64;
         loop {
             old_f64 = f64::from_bits(old_u64);
             let new = f64::to_bits(old_f64 - v);
-            match self.compare_exchange_weak(old_u64, new, Ordering::Relaxed, Ordering::Relaxed) {
+            match self.compare_exchange_weak(old_u64, new, Ordering::SeqCst, Ordering::SeqCst) {
                 Ok(_) => break,
                 Err(x) => old_u64 = x,
             }
@@ -226,11 +226,11 @@ impl Atomic<f64> for AtomicU64 {
     }
 
     fn set(&self, v: f64) -> f64 {
-        f64::from_bits(self.swap(f64::to_bits(v), Ordering::Relaxed))
+        f64::from_bits(self.swap(f64::to_bits(v), Ordering::SeqCst))
     }
 
     fn get(&self) -> f64 {
-        f64::from_bits(self.load(Ordering::Relaxed))
+        f64::from_bits(self.load(Ordering::SeqCst))
     }
 }
 
@@ -241,7 +241,7 @@ impl Atomic<i64> for AtomicI64 {
     }
 
     fn inc_by(&self, v: i64) -> i64 {
-        self.fetch_add(v, Ordering::Relaxed)
+        self.fetch_add(v, Ordering::SeqCst)
     }
 
     fn dec(&self) -> i64 {
@@ -249,15 +249,15 @@ impl Atomic<i64> for AtomicI64 {
     }
 
     fn dec_by(&self, v: i64) -> i64 {
-        self.fetch_sub(v, Ordering::Relaxed)
+        self.fetch_sub(v, Ordering::SeqCst)
     }
 
     fn set(&self, v: i64) -> i64 {
-        self.swap(v, Ordering::Relaxed)
+        self.swap(v, Ordering::SeqCst)
     }
 
     fn get(&self) -> i64 {
-        self.load(Ordering::Relaxed)
+        self.load(Ordering::SeqCst)
     }
 }
 
