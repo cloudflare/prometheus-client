@@ -222,10 +222,10 @@ impl<S: Clone + std::hash::Hash + Eq, M, C: MetricConstructor<M>> Family<S, M, C
             return metric;
         }
 
-        let mut write_guard = self.metrics.write();
-        write_guard.insert(label_set.clone(), self.constructor.new_metric());
-
-        drop(write_guard);
+        self.metrics
+            .write()
+            .entry(label_set.clone())
+            .or_insert_with(|| self.constructor.new_metric());
 
         RwLockReadGuard::map(self.metrics.read(), |metrics| {
             metrics
